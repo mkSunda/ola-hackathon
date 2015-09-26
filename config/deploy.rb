@@ -32,7 +32,7 @@ set :deploy_to, '/home/ops/ola-hackathon'
 # set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
@@ -42,6 +42,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+before "deploy:assets:precompile", "deploy:symlink:linked_files"
 
 namespace :deploy do
 
@@ -64,4 +65,8 @@ namespace :deploy do
     end
   end
 
+end
+
+task :config_symlink do
+  execute "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
 end
