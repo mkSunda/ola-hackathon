@@ -7,7 +7,8 @@ class ApiController < ApplicationController
   def slack
     raise "You are not authorized"  if params[:token] != 'jDJikfKaPyuCUZfBCU72dcwo'
     @response = Sudo.respond_back(Sudo.parse_slack_command(params[:text]))
-    render :json => @response.as_json
+    @slack_response = Sudo.slack_formatting(@response)
+    render :json => @slack_response.as_json
     # render :text => "Successfully Done!"
   end
 end
