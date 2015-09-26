@@ -17,3 +17,4 @@
 .rvmrc
 .gitignore
 tmp/
+config/database.yml
