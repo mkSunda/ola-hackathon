@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150926140818) do
+ActiveRecord::Schema.define(version: 20150926161438) do
 
   create_table "cabs", force: :cascade do |t|
     t.string   "name",                    limit: 255
@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(version: 20150926140818) do
     t.integer  "minimum_time",            limit: 4
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+  end
+
+  create_table "location_histories", force: :cascade do |t|
+    t.integer  "location_id",     limit: 4
+    t.integer  "cab_id",          limit: 4
+    t.integer  "eta",             limit: 4
+    t.float    "distance",        limit: 24
+    t.string   "type",            limit: 255
+    t.string   "surcharge_type",  limit: 255
+    t.float    "surcharge_value", limit: 24
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "locations", force: :cascade do |t|

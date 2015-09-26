@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  location_id: 1
+  cab_id: 1
+  eta: 1
+  distance: 1.5
+  type: 
+  surcharge_type: MyString
+  surcharge_value: 1.5
+
+two:
+  location_id: 1
+  cab_id: 1
+  eta: 1
+  distance: 1.5
+  type: 
+  surcharge_type: MyString
+  surcharge_value: 1.5
