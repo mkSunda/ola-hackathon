@@ -1,4 +1,6 @@
 class ApiController < ApplicationController
+  # skip_before_filter :verify_authenticity_token
+
   def index
     @response = Sudo.respond_back(params)
     render :json => @response.as_json
@@ -10,5 +12,12 @@ class ApiController < ApplicationController
     @slack_response = Sudo.slack_formatting(@response)
     render :json => @slack_response.as_json, :status => 200
     # render :text => "Successfully Done!"
+  end
+
+  def bot
+    raise "You are not authorized"  if params[:token] != 'QtkxFXX2Vk8yDrkrEMbMASuf'
+    text = params[:text]
+    @bot_response = Bot.respond_back(text)
+    render :json => @bot_response.as_json, :status => 200
   end
 end
