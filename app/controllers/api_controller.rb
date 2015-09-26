@@ -1,10 +1,11 @@
 class ApiController < ApplicationController
   def index
-  	params[:command]
-    params[:lat]
-    params[:lng]
-    cab = OlaCabs.new
-    @response = cab.ride_availability(params[:lat], params[:lng], params[:category])
+    @response = Sudo.respond_back(params)
     render :json => @response.as_json
+  end
+
+  def slack
+    raise "You are not authorized"  if params[:token] != 'jDJikfKaPyuCUZfBCU72dcwo'
+    @response = Sudo.respond_back(Sudo.parse_slack_command(params[:text]))
   end
 end
