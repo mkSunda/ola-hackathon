@@ -24,8 +24,12 @@ class ApiController < ApplicationController
 
   def bot
     raise "You are not authorized"  if params[:token] != 'QtkxFXX2Vk8yDrkrEMbMASuf'
-    text = params[:text]
-    @bot_response = Bot.respond_back(text)
-    render :json => @bot_response.as_json, :status => 200
+    if params[:user_id] == "USLACKBOT"
+      render :json => {}, :status => 200
+    else
+      text = params[:text]
+      @bot_response = Bot.respond_back(text)
+      render :json => @bot_response.as_json, :status => 200
+    end
   end
 end
