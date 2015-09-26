@@ -3,8 +3,8 @@ class CreateLocations < ActiveRecord::Migration
     create_table :locations do |t|
       t.string :name
       t.integer :pincode
-      t.decimal :lat
-      t.decimal :lat
+      t.decimal :lat, :precision => 10, :scale => 8
+      t.decimal :lng, :precision => 10, :scale => 8
 
       t.timestamps null: false
     end
