@@ -8,7 +8,8 @@ class CreateLocationHistories < ActiveRecord::Migration
       t.string :type
       t.string :surcharge_type
       t.float :surcharge_value
-
+      t.datetime :time
+      
       t.timestamps null: false
     end
   end

@@ -1,5 +1,6 @@
 Rails.logger.info "Seeding Cabs...."
 
-Cab.create(name: "Mini")
-Cab.create(name: "Sedan")
-Cab.create(name: "Prime")
+Cab.delete_all
+Cab.create(id:1, name: "Mini")
+Cab.create(id: 2, name: "Sedan")
+Cab.create(id:3, name: "Prime")
