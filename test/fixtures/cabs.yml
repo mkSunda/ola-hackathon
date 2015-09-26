@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  base_fare: 1
+  cost_per_distance: 9.99
+  waiting_cost_per_minute: 9.99
+  ride_cost_per_minute: 9.99
+  minimum_distance: 9.99
+  minimum_time: 1
+
+two:
+  name: MyString
+  base_fare: 1
+  cost_per_distance: 9.99
+  waiting_cost_per_minute: 9.99
+  ride_cost_per_minute: 9.99
+  minimum_distance: 9.99
+  minimum_time: 1
