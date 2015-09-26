@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   get 'api',             :to => 'api#index'
   get 'api/slack',       :to => 'api#slack'
   post 'api/bot',        :to => 'api#bot' 
+  get 'api/book',        :to => 'api#book'
+  get 'api/command',     :to => 'api#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

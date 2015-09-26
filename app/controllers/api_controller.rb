@@ -2,9 +2,17 @@ class ApiController < ApplicationController
   # skip_before_filter :verify_authenticity_token
 
   def index
+    params[:command] = params[:command].downcase
     @response = Sudo.respond_back(params)
     render :json => @response.as_json
   end
+
+  def book
+    cab = OlaCabs.new(params[:access_token])
+    @response = cab.book_ride(params[:lat], params[:lng])
+    render :json => @response.as_json
+  end
+
 
   def slack
     raise "You are not authorized"  if params[:token] != 'jDJikfKaPyuCUZfBCU72dcwo'

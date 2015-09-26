@@ -4,9 +4,11 @@ class OlaCabs
     @access_token = token
   end
 	
-	def book_ride(pickup_lat, pickup_lng, pickup_mode = "NOW", category)
-  	url = "http://devapi.olacabs.com/v1/booking/create?pickup_lat=12.9490936&pickup_lng=77.6443056&pickup_mode=NOW&category=sedan"
-  	res = RestClient.get url, headers
+	def book_ride(pickup_lat, pickup_lng, pickup_mode = "NOW", category = nil)
+  	url = "http://sandbox-t.olacabs.com/v1/bookings/create?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&pickup_mode=#{pickup_mode}&category=sedan"
+  	# url = "http://sandbox­-t.olacabs.com/v1/bookings/create?pickup_lat=12.950072&pickup_lng=77.642684&pickup_mode=NOW&category=sedan"
+    res = RestClient.get(url, headers){ |i,j,k| i}
+    JSON.parse(res)
   end
 
   def cancel_ride(crn)
@@ -40,6 +42,10 @@ class OlaCabs
 
   private
 	  def headers
-	  	{:content_type => :json, :accept => :json, "X-APP-TOKEN" => "071533ba0db64fd0b8886d668b02abf7"}
+      if @access_token.blank?
+	  	  {:content_type => :json, :accept => :json, "X-APP-TOKEN" => "071533ba0db64fd0b8886d668b02abf7"}
+      else
+        {:content_type => :json, :accept => :json, "X-APP-TOKEN" => "071533ba0db64fd0b8886d668b02abf7", :Authorization => "Bearer #{@access_token}"} 
+      end
 	  end
 end
