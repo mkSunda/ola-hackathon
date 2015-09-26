@@ -28,7 +28,7 @@ class ApiController < ApplicationController
       render :json => {}, :status => 200
     else
       text = params[:text]
-      @bot_response = Bot.respond_back(text)
+      @bot_response = Bot.response(text)
       render :json => @bot_response.as_json, :status => 200
     end
   end
