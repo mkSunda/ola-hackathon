@@ -1,141 +1,67 @@
-# config/deploy.rb
-require "bundler/capistrano"
-require 'capistrano/ext/multistage'
-require 'rest-client'
+# config valid only for current version of Capistrano
+lock '3.4.0'
 
-set :whenever_command, "bundle exec whenever"
-set :whenever_environment, defer { stage }
+set :application, 'ola-hackathon'
+set :repo_url, 'git@github.com:mkSunda/ola-hackathon.git'
 
-require 'whenever/capistrano'
+set :branch, 'master'
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+set :ssh_options, {
+  forward_agent: true,
+  port: 22
+}
 
-set :stages, %w(staging production)
-# set :default_stage, "beta"
+set :rvm_ruby_version, '2.1.3@ola'      # Defaults to: 'default'
 
-set :application,     "ola-hackathon"
-set :scm,             :git
-set :repository,      "git@github.com:mksunda/ola-hackathon.git"
-set :branch,          "origin/master"
+set :format, :pretty
+set :log_level, :debug
+set :pty, true
 
-# set :use_sudo,        false
-# set :migrate_target,  :current
-# set :ssh_options,     { :forward_agent => true }
-# set :rails_env,       "production"
-# set :user,            "alpha"
-# set :group,           "alpha"
-# set :use_sudo,        false
-#
+set :deploy_to, '/home/ops/ola-hackathon'
 
-set :deploy_to,       "/home/ops/ola-hackathon" # TODO
-set :normalize_asset_timestamps, false
+# Default value for :scm is :git
+# set :scm, :git
 
-set(:latest_release)  { fetch(:current_path) }
-set(:release_path)    { fetch(:current_path) }
-set(:current_release) { fetch(:current_path) }
+# Default value for :format is :pretty
+# set :format, :pretty
 
-set(:current_revision)  { capture("cd #{current_path}; git rev-parse --short HEAD").strip }
-set(:latest_revision)   { capture("cd #{current_path}; git rev-parse --short HEAD").strip }
-set(:previous_revision) { capture("cd #{current_path}; git rev-parse --short HEAD@{1}").strip }
-default_run_options[:shell] = 'bash'
-default_run_options[:pty] = true
+# Default value for :log_level is :debug
+# set :log_level, :debug
 
-after 'deploy:update_code', 'deploy:migrate'
+# Default value for :pty is false
+# set :pty, true
+
+# Default value for :linked_files is []
+# set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
+
+# Default value for linked_dirs is []
+# set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
 
 namespace :deploy do
 
-  desc "Setup your git-based deployment app"
-  task :setup, :except => { :no_release => true } do
-    dirs = [deploy_to, shared_path]
-    dirs += shared_children.map { |d| File.join(shared_path, d) }
-    run "#{try_sudo} mkdir -p #{dirs.join(' ')} && #{try_sudo} chmod g+w #{dirs.join(' ')}"
-    run "git clone #{repository} #{current_path}"
-  end
-
-  task :cold do
-    update
-    migrate
-  end
-
-  desc "Deploy latest code"
-  task :update do
-    transaction do
-      update_code
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      execute :touch, release_path.join('tmp/restart.txt')
     end
   end
 
-  desc "Update the database (overwritten to avoid symlink)"
-  task :migrations do
-    update
-    migrate
-  end
+  after :publishing, :restart
 
-  #---- my own precompile task -------
-
-  desc "Forced pre-compilation of assets"
-  task :precompile, :roles => :web, :except => { :no_release => true } do
-    run "cd #{current_path} && #{rake} RAILS_ENV=production #{asset_env} assets:precompile"
-  end
-
-  after "deploy:create_symlink", "deploy:update_crontab"
-  desc "Update the crontab file"
-  task :update_crontab, :roles => :app do
-    run "cd #{current_path} && whenever --update-crontab #{application}"
-  end
-
-  # Start DB -----------------------------------------------------
-  namespace :db do
-
-    desc "reload the database with seed data"
-    task :seed do
-      run "cd #{current_path}; bundle exec rake db:seed RAILS_ENV=#{rails_env}"
-    end
-
-    desc "reset the database"
-    task :reset do
-      run "cd #{current_path}; bundle exec rake db:reset RAILS_ENV=#{rails_env}"
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
     end
   end
-  # End DB -----------------------------------------------------
 
-  # desc "Zero-downtime restart of Passenger"
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-  end
-
-  # Start Code update --------------------------------------------------
-  desc "Update the deployed code."
-  task :update_code, :except => { :no_release => true } do
-      run "cd #{current_path}; git fetch origin; git reset --hard #{branch}"
-      finalize_update
-  end
-
-
-  task :finalize_update, :except => { :no_release => true } do
-    run "chmod -R g+w #{latest_release}" if fetch(:group_writable, true)
-
-    # mkdir -p is making sure that the directories are there for some SCM's that don't
-    # save empty folders
-    run <<-CMD
-      ln -sf /home/ops/config/database.yml #{latest_release}/config/database.yml;
-      ln -sf /home/ops/config/rabbit.yml #{latest_release}/config/rabbit.yml;
-    CMD
-    #rm -rf #{latest_release}/log #{latest_release}/tmp/pids &&
-    # rm -rf #{latest_release}/log #{latest_release}/public/system #{latest_release}/tmp/pids &&
-    # mkdir -p #{latest_release}/public &&
-    # mkdir -p #{latest_release}/tmp &&
-    # ln -s #{shared_path}/log #{latest_release}/log &&
-    # ln -s #{shared_path}/system #{latest_release}/public/system &&
-    # ln -s #{shared_path}/pids #{latest_release}/tmp/pids &&
-
-    if fetch(:normalize_asset_timestamps, true)
-      stamp = Time.now.utc.strftime("%Y%m%d%H%M.%S")
-      asset_paths = fetch(:public_children, %w(images stylesheets javascripts)).map { |p| "#{latest_release}/public/#{p}" }.join(" ")
-      run "find #{asset_paths} -exec touch -t #{stamp} {} ';'; true", :env => { "TZ" => "UTC" }
-    end
-  end
-  # End Code update -----------------------------------------------------
-
-end
-
-def run_rake(cmd)
-  run "cd #{current_path}; #{rake} #{cmd}"
 end
