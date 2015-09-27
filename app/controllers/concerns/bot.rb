@@ -15,6 +15,12 @@ class Bot
     when "driver location"
       ride = Ride.last
       msg = driver_location_message(ride)
+    when "estimate"
+      from = Location.where("name is like '%?%'",action[:from]).first
+      to = Location.where("name is like '%?%'",action[:to]).first
+      {text : "Please enter valid locations"} if from.nil? || to.nil?
+      @response = OlaCabs.new.ride_estimate(from.lat, from.lng, to.lat, to.lng)
+      {text:"fare estimate is between #{@response["ride_estimate"]["amount_min"]} to #{@response["ride_estimate"]["amount_min"]}" }
     else
       {}
     end
@@ -35,6 +41,9 @@ class Bot
       { cmd: "book at", value: matches[0].squish, unit: matches[1].squish }
     elsif text.match(PATTERNS[:driver_location])
       { cmd: "driver location" }
+    elsif text.match(PATTERNS[:estimate])
+      matches = text.match(PATTERNS[:estimate]).captures
+      { cmd: "estimate" from: matches[0], to: matches[1]}
     else
       {}
     end

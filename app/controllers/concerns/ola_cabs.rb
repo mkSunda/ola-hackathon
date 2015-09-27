@@ -17,18 +17,19 @@ class OlaCabs
   end
 
   def ride_availability(pickup_lat, pickup_lng, category = nil)
-    pickup_lat = "12.950072" if pickup_lat.nil?
-    pickup_lng = "77.642684" if pickup_lng.nil?
+    # pickup_lat = "12.950072" if pickup_lat.nil?
+    # pickup_lng = "77.642684" if pickup_lng.nil?
     url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}"
     url += "&category=#{category}" if not category.blank?
   	res = RestClient.get url, headers
     JSON.parse(res)
   end
 
-  # def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = nil)
-  # 	url = "https://devapi.olacabs.com/v1/products?pickup_lat=12.9491416&pickup_lng=77.64298&drop_lat=12.96&drop_lng=77.678&category=sedan"
-  #   res = RestClient.get url, headers
-  # end
+  def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = nil)
+  	url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&drop_lat=#{drop_lat}&drop_lng=#{drop_lng}&category=sedan"
+    res = RestClient.get url, headers
+    JSON.parse(res)
+  end
 
   def track_ride
   	url = "http://devapi.olacabs.com/v1/bookings/track_ride"
