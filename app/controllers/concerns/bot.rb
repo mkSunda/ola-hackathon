@@ -73,6 +73,10 @@ class Bot
       return {text: "Please enter valid locations"} if from.nil? || to.nil?
       @response = OlaCabs.new.ride_estimate(from.lat, from.lng, to.lat, to.lng)
       {text:"fare estimate is between #{@response["ride_estimate"].first["amount_min"]} to #{@response["ride_estimate"].first["amount_max"]}" }
+    when "cancel ride"
+      { text: "Bleh! :expressionless: Please take the cab and leave." }
+    when "thanks"
+      { text: "Your welcome!:blush: It was a pleasure helping you booking an Ola." }
     else
       {}
     end
@@ -110,6 +114,10 @@ class Bot
     elsif text.match(PATTERNS[:estimate])
       matches = text.match(PATTERNS[:estimate]).captures
       { cmd: "estimate", from: matches[0], to: matches[1]}
+    elsif text.match(PATTERNS[:cancel_ride])
+      { cmd: "cancel ride" }
+    elsif text.match(PATTERNS[:thanks])
+      { cmd: "thanks" }
     else
       {}
     end

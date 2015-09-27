@@ -7,6 +7,8 @@ PATTERNS = {
   book_at: /book.*at(.*\d?) (.*\w?)/i,
   estimate: /from (.*\w?) to (.*\w?)/i,
   driver_location: /(driv.*loca|wher.*driv)/i,
+  cancel_ride: /canc*ride/,
+  thanks: /^(thank|thx|ty)/
 }
 
 REDIS = Redis.new(host: '127.0.0.1', port: 6379, db: 3)
