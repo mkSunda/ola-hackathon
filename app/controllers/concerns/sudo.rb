@@ -1,8 +1,9 @@
 class Sudo
 
 	def self.parse_command(params)
-		params[:time] = params[:command].match('([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] [APap][.][mM][.]').to_a.first
+		params[:time] = params[:command].match('([0-9]|0[0-9]|1[0-9]|2[0-3])((:[0-5][0-9])|) [APap][.][mM][.]').to_a.first
 		params[:time] = params[:command].match('([0-9]|0[0-9]|1[0-9]|2[0-3]) o\'clock').to_a.first if params[:time].nil?
+		params[:time] = params[:command].match("([0-9]|0[0-9]|1[0-9]|2[0-3]) ((hour)|(min))").to_a.first if params[:time].nil?
 		params[:category] = params[:command].match('mini|sedan|prime').to_a.first
 		params[:command] = params[:command].match('book|cancel|call|track|get|availability').to_a.first
 	end
@@ -20,8 +21,30 @@ class Sudo
 	    @response = cab.ride_availability(params[:lat], params[:lng], params[:category])
 	  when "book", "call", "get"
 	  	user = User.find(2)
-	  	@response = cab.book_ride(params[:lat], params[:lng])
-	  	Ride.create_new(user, Location.first, @response) if not @response.blank?
+	  	if params[:time].nil?
+	  		@response = cab.book_ride(params[:lat], params[:lng])
+	  		Ride.create_new(user, Location.first, @response) if not @response.blank?
+	  		return {"message" => "Ola! We have booked your cab"}
+	  	end
+
+	  	time = nil
+	  	if params[:time].include?("clock")
+	  		if Time.now < "#{params[:time].split.first} a.m.".to_time
+	  			params[:time] = "#{params[:time].split.first} a.m."
+	  		else
+	  			params[:time] = "#{params[:time].split.first} p.m."
+	  		end
+	  	end
+
+	  	if(params[:time].include?("min") || params[:time].include?("hour"))
+	  		value, units = params[:time].split
+	  		time = Bot.desired_time(value, units)
+	  	else
+	  		time = params[:time]
+	  	end
+	  	ScheduledBooking.new_booking(2,1,time.to_time)
+
+	  	{"message" => "Ola! We have scheduled your cab for #{time}"}
 
 	  when "cancel"
 

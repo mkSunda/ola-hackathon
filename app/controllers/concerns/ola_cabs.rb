@@ -17,6 +17,8 @@ class OlaCabs
   end
 
   def ride_availability(pickup_lat, pickup_lng, category = nil)
+    pickup_lat = "12.950072" if pickup_lat.nil?
+    pickup_lng = "77.642684" if pickup_lng.nil?
     url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}"
     url += "&category=#{category}" if not category.blank?
   	res = RestClient.get url, headers
