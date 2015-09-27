@@ -1,4 +1,5 @@
 class Ride < ActiveRecord::Base
+	belongs_to :user
 
   def self.create_new(user, location, ride_response)
     rr = ride_response

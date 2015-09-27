@@ -19,7 +19,9 @@ class Sudo
 		when "availability"
 	    @response = cab.ride_availability(params[:lat], params[:lng], params[:category])
 	  when "book", "call", "get"
+	  	user = User.find(2)
 	  	@response = cab.book_ride(params[:lat], params[:lng])
+	  	Ride.create_new(user, Location.first, @response) if not @response.blank?
 
 	  when "cancel"
 
@@ -51,10 +53,21 @@ class Sudo
 		case params[:command]
 		when "availability"
 			output = {}
+			output[:cabs] = {}
 			return nil if json["categories"].blank?
  			json["categories"].each do |category|
-				output[category["display_name"]] = {"eta" => category["eta"]}
+				output[:cabs][category["display_name"]] = {"eta" => category["eta"]}
 			end
+			output[:ride] = {}
+			user = User.find(2)
+			ride = user.rides.order("arrival_time").last
+			scheduled_booking = user.scheduled_bookings.order("pickup_time").last
+			if not ride.nil?
+				output[:ride] = {:category => "Sedan", :pickup_time => ride.arrival_time.strftime("%I:%M %p")}
+			elsif not scheduled_booking.nil?
+				output[:ride] = {:category => "Sedan", :pickup_time => ride.pickup_time.strftime("%I:%M %p")}
+			end
+					
 			return output
 		when "book", "call", "get"
 			return json
