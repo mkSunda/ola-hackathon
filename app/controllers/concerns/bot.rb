@@ -58,8 +58,9 @@ class Bot
       end
     when "book in"
       time = desired_time(action[:value], action[:unit])
-      ScheduledBooking.new_booking(1,1,time.to_time)
-      {text: "Ola! We have scheduled your cab for #{time}"}
+      ScheduledBooking.new_booking(1,1,time)
+      {text: "Ola! We have scheduled your cab for #{time.strftime("%I:%M %p")
+}"}
     when "book at"
       time = "#{action[:value]} #{action[:unit]}"
       ScheduledBooking.new_booking(1,1,time.to_time)      
@@ -76,7 +77,7 @@ class Bot
     when "cancel ride"
       { text: "Bleh! :expressionless: Please take the cab and leave." }
     when "thanks"
-      { text: "Your welcome!:blush: It was a pleasure helping you booking an Ola." }
+      { text: "Your welcome!:blush: It was a pleasure helping you book an Ola." }
     else
       {}
     end
@@ -131,7 +132,6 @@ class Bot
     elsif units.starts_with?("h")
       time += value.to_i.send(:hours)
     end
-    time.strftime("%I:%M %p")
   end
 
   def self.confirmation_message(ride)
@@ -143,8 +143,8 @@ class Bot
 
             color: "#E18B3D",
 
-            pretext: "Hola! Your cab will arive in #{eta} minutes. crn: #{ride.crn}",
-            text: "#{ride.driver_name}\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t\t\t\t\t#{ride.cab_number}",
+            pretext: "Hola! Your cab will arive in *#{eta}* minutes. crn: *#{ride.crn}*",
+            text: "*#{ride.driver_name}*\t\t\t*#{ride.car_model}*\n#{ride.driver_number}\t\t\t\t\t\t#{ride.cab_number}",
         }
       ]
     }
