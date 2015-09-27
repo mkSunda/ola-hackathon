@@ -19,9 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 30.minutes do
-  rake "location_history:track"
-end
+# every 30.minutes do
+#   rake "location_history:track"
+# end
 
 every 1.minute do
   rake "location_history:fulfill"
