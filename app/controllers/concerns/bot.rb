@@ -4,6 +4,44 @@ class Bot
     action = parse_command(text)
     command = action[:cmd]
     case command
+    when "cancel"
+      { text: ":expressionless: Why are you wasting my time ? :rage:"}
+    when "find mini"
+      location = Location.find(2)
+      res = OlaCabs.new.mini_available?(location)
+      if res
+        session[:action] = {yes: "book mini", no: "cancel" }
+        #defunct in sandbox
+        text = { text: "A mini is 2 minutes away. Should I book it for you ?" }
+      else
+        session[:action] = { yes: "book sedan", no: "cancel" }
+        res = OlaCabs.new.sedan_available?(location)
+        #unreliable sedan availability; works for only 2,5,19,27,40
+        text = { text: "There are no minis available right now, would you like me to book a Sedan 17 mins away at INR 13/km ?" }
+      end
+    when "find sedan"
+      location = Location.find(2)
+      res = OlaCabs.new.sedan_available?(location)
+      if res
+        session[:action] = { yes: "book sedan", no: "cancel" }
+        text = { text: "A sedan is #{res} mins away. Would you like me to book it ?" }
+      else
+        session.clear
+        { text: "Sorry! :sweat: All our cab operators our busy." }
+      end
+    when "book mini"
+      #can't be achieved in sandbox
+    when "book sedan"
+      user = User.first
+      location = Location.find(2)
+      ride = OlaCabs.new(user.token).book_sedan(user, location)
+      if ride
+        msg = confirmation_message(ride)
+        respond_back(msg)
+        {}
+      else
+        { text: "Sorry! :sweat: All our cab operators our busy." }
+      end
     when "book in"
       time = desired_time(action[:value], action[:unit])
       ScheduledBooking.new_booking(1,1,time.to_time)
@@ -33,7 +71,21 @@ class Bot
   end
 
   def self.parse_command(text)
-    if text.match(PATTERNS[:book_in])
+    #rely on session data for yes actions
+    if text.match(PATTERNS[:yes])
+      action = session[:action][:yes]
+      session.clear
+      { cmd: action }
+    #rely on session data for no actions
+    elsif text.match(PATTERNS[:no])
+      action = session[:action][:no]
+      session.clear
+      { cmd: action }
+    elsif text.match(PATTERNS[:mini])
+      { cmd: "find mini" }
+    elsif text.match(PATTERNS[:sedan])  
+      { cmd: "find sedan" }
+    elsif text.match(PATTERNS[:book_in])
       matches = text.match(PATTERNS[:book_in]).captures
       { cmd: "book in", value: matches[0].squish, unit: matches[1].squish }
     elsif text.match(PATTERNS[:book_at])

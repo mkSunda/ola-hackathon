@@ -136,6 +136,10 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    redis (3.2.1)
+    redis-session-store (0.8.0)
+      actionpack (>= 3, < 5)
+      redis
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -199,6 +203,7 @@ DEPENDENCIES
   pry
   pry-nav
   rails (= 4.2.1)
+  redis-session-store
   rest-client
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

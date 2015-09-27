@@ -4,11 +4,53 @@ class OlaCabs
     @access_token = token
   end
 	
-	def book_ride(pickup_lat, pickup_lng, pickup_mode = "NOW", category = nil)
-  	url = "http://sandbox-t.olacabs.com/v1/bookings/create?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&pickup_mode=#{pickup_mode}&category=sedan"
+	def book_ride(pickup_lat, pickup_lng, pickup_mode = "NOW", category = 'sedan')
+  	url = "http://sandbox-t.olacabs.com/v1/bookings/create?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&pickup_mode=#{pickup_mode}&category=#{category}"
   	# url = "http://sandbox­-t.olacabs.com/v1/bookings/create?pickup_lat=12.950072&pickup_lng=77.642684&pickup_mode=NOW&category=sedan"
     res = RestClient.get(url, headers){ |i,j,k| i}
     JSON.parse(res)
+  end
+
+  #used by slackbot
+  #sandbox is always false
+  def mini_available?(location)
+    # res = ride_availability(location.lat, location.lng, "mini")
+    # output = res["categories"][0]
+    # if output["eta"] == -1
+    return false
+    # else
+      # return true 
+    # end
+  end
+
+  #used by slackbot
+  #unreliable in sandbox
+  def sedan_available?(location)
+    res = ride_availability(location.lat, location.lng, "sedan")
+    output = res["categories"][0]
+    if output["eta"] == -1
+      return false
+    else
+      return output["eta"]
+    end
+  end
+
+  def book_mini(user, location)
+    response = book_ride(location.lat, location.lng, "NOW", "mini")
+    if response["status"] == "FAILURE"
+      return false
+    else
+      ride = Ride.create_new(user, location, response)
+    end    
+  end
+
+  def book_sedan(user, location)
+    response = book_ride(location.lat, location.lng, "NOW", "sedan")
+    if response["status"] == "FAILURE"
+      return false
+    else
+      ride = Ride.create_new(user, location, response)
+    end
   end
 
   def cancel_ride(crn)
