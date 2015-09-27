@@ -8,14 +8,14 @@ class User < ActiveRecord::Base
 		output = nil
 		if !ride.nil? && !scheduled_booking.nil?
 			if ride.created_at > scheduled_booking.created_at
-				output = {:category => "Sedan", :pickup_time => ride.arrival_time.in_time_zone("Mumbai").strftime("%I:%M %p"),
+				output = {:category => ride.cab_type, :pickup_time => ride.arrival_time.in_time_zone("Mumbai").strftime("%I:%M %p"),
 			 :driver_name => ride.driver_name, :driver_number => ride.driver_number, :cab_number => ride.cab_number,
 			 :car_model => ride.car_model, :confirmed => true}
 			else
 				output = {:category => "Sedan", :pickup_time => scheduled_booking.pickup_time.in_time_zone("Mumbai").strftime("%I:%M %p"), :confirmed => false}
 			end
 		elsif not ride.nil?
-			output = {:category => "Sedan", :pickup_time => ride.arrival_time.in_time_zone("Mumbai").strftime("%I:%M %p"),
+			output = {:category => ride.cab_type, :pickup_time => ride.arrival_time.in_time_zone("Mumbai").strftime("%I:%M %p"),
 			 :driver_name => ride.driver_name, :driver_number => ride.driver_number, :cab_number => ride.cab_number,
 			 :car_model => ride.car_model, :confirmed => true}
 		elsif not scheduled_booking.nil?
