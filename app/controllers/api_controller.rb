@@ -10,7 +10,8 @@ class ApiController < ApplicationController
   def book
     cab = OlaCabs.new(params[:access_token])
     @response = cab.book_ride(params[:lat], params[:lng])
-    render :json => Sudo.app_formatting(@response).as_json
+    Ride.create_new(User.find(2), Location.first, @response) if not @response.blank?
+    render :json => {"message" => "Ola! We have booked your cab"}.as_json
   end
 
   def details
