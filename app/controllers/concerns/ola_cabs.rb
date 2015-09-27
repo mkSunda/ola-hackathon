@@ -8,7 +8,7 @@ class OlaCabs
   	url = "http://sandbox-t.olacabs.com/v1/bookings/create?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&pickup_mode=#{pickup_mode}&category=#{category}"
   	# url = "http://sandbox­-t.olacabs.com/v1/bookings/create?pickup_lat=12.950072&pickup_lng=77.642684&pickup_mode=NOW&category=sedan"
     res = RestClient.get(url, headers){ |i,j,k| i}
-    JSON.parse(res)
+    JSON.parse(res) if not res.blank?
   end
 
   #used by slackbot
@@ -64,13 +64,13 @@ class OlaCabs
     url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}"
     url += "&category=#{category}" if not category.blank?
   	res = RestClient.get url, headers
-    JSON.parse(res)
+    JSON.parse(res) if not res.blank?
   end
 
   def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = "sedan")
   	url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&drop_lat=#{drop_lat}&drop_lng=#{drop_lng}&category=#{category}"
     res = RestClient.get url, headers
-    JSON.parse(res)
+    JSON.parse(res)  if not res.blank?
   end
 
   def track_ride

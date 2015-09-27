@@ -72,7 +72,7 @@ class Bot
       to = Location.where("lower(name) like ?","%#{action[:to].downcase.gsub("?","").strip}%").first
       return {text: "Please enter valid locations"} if from.nil? || to.nil?
       @response = OlaCabs.new.ride_estimate(from.lat, from.lng, to.lat, to.lng)
-      {text:"The fare is #{@response["ride_estimate"].first["amount_min"]}-#{@response["ride_estimate"].first["amount_max"]} INR" }
+      {text: "The fare is #{@response["ride_estimate"].first["amount_min"]}-#{@response["ride_estimate"].first["amount_max"]} INR" }
     when "cancel ride"
       { text: "Bleh! :expressionless: Please take the cab and leave." }
     when "thanks"
