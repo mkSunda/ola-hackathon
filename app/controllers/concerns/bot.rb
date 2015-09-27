@@ -47,7 +47,18 @@ class Bot
   end
 
   def confirmation_message(ride)
+    {
+      attachments: [
+        {
+            fallback: "A cab has been booked",
 
+            color: "#E18B3D",
+
+            pretext: "Hola! Your cab details: #{ride.crn}",
+            text: "#{ride.driver_name}\t\t\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t#{ride.cab_number}",
+        }
+      ]
+    }
   end
   
 end

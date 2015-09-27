@@ -13,7 +13,8 @@ class ScheduledBooking < ActiveRecord::Base
   end
 
   def self.get_pending
-    self.where(status: STATUS[:pending]).all
+    time = DateTime.now + 5.minutes
+    self.where(status: STATUS[:pending]).where("pickup_time < ?", time).all
   end
 
 end

@@ -14,6 +14,7 @@ namespace :location_history do
       cab = OlaCabs.new(user.token)
       ride_response = cab.book_ride(loc.lat, loc.lng)
       ride = Ride.create_new(user, location, ride_response)
+      b.confirm_booking
     end
   end  
 end
