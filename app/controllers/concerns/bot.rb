@@ -95,7 +95,7 @@ class Bot
       { cmd: "driver location" }
     elsif text.match(PATTERNS[:estimate])
       matches = text.match(PATTERNS[:estimate]).captures
-      { cmd: "estimate" from: matches[0], to: matches[1]}
+      { cmd: "estimate", from: matches[0], to: matches[1]}
     else
       {}
     end

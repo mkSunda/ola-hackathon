@@ -3,10 +3,18 @@ class User < ActiveRecord::Base
   has_many :rides
 
   def ride_details
-  	ride = self.rides.order("arrival_time").last
-		scheduled_booking = self.scheduled_bookings.order("pickup_time").last
+  	ride = self.rides.order("created_at").last
+		scheduled_booking = self.scheduled_bookings.order("created_at").last
 		output = nil
-		if not ride.nil?
+		if !ride.nil? && !scheduled_booking.nil?
+			if ride.created_at > scheduled_booking.created_at
+				output = {:category => "Sedan", :pickup_time => ride.arrival_time.strftime("%I:%M %p"),
+			 :driver_name => ride.driver_name, :driver_number => ride.driver_number, :cab_number => ride.cab_number,
+			 :car_model => ride.car_model, :confirmed => true}
+			else
+				output = {:category => "Sedan", :pickup_time => ride.pickup_time.strftime("%I:%M %p"), :confirmed => false}
+			end
+		elsif not ride.nil?
 			output = {:category => "Sedan", :pickup_time => ride.arrival_time.strftime("%I:%M %p"),
 			 :driver_name => ride.driver_name, :driver_number => ride.driver_number, :cab_number => ride.cab_number,
 			 :car_model => ride.car_model, :confirmed => true}
