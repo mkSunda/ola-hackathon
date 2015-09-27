@@ -14,10 +14,14 @@ class Bot
         #defunct in sandbox
         text = { text: "A mini is 2 minutes away. Should I book it for you ?" }
       else
-        Cache.set("book sedan", "cancel")
         res = OlaCabs.new.sedan_available?(location)
-        #unreliable sedan availability; works for only 2,5,19,27,40
-        text = { text: "There are no minis available right now, would you like me to book a Sedan 17 mins away at INR 13/km ?" }
+        if res
+          Cache.set("book sedan", "cancel")
+          text = { text: "There are no minis available right now, would you like me to book a Sedan #{res} mins away at INR 13/km ?" }
+        else
+          #unreliable sedan availability; works for only 2,5,19,27,40
+          { text: "Sorry! :sweat: All our cab operators our busy." }  
+        end
       end
     when "find sedan"
       location = Location.find(2)
@@ -31,6 +35,16 @@ class Bot
       end
     when "book mini"
       #can't be achieved in sandbox
+      user = User.first
+      location = Location.find(2)
+      ride = OlaCabs.new(user.token).book_mini(user, location)
+      if ride
+        msg = confirmation_message(ride)
+        respond_back(msg)
+        {}
+      else
+        { text: "Sorry! :sweat: All our cab operators our busy." }
+      end
     when "book sedan"
       user = User.first
       location = Location.find(2)
@@ -130,8 +144,7 @@ class Bot
 
   def self.driver_location_message(ride)
     payload = {
-    "text" => "Your driver's location: <https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&markers=color:red%7Clabel:C%7C#{ride.driver_lat},#{ride.driver_lng}&maptype=roadmap&sensor=false| >",
-    "icon_emoji" => ":earth_americas:"
+    "text" => "Your driver's location: <https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&markers=color:red%7Clabel:C%7C#{ride.driver_lat},#{ride.driver_lng}&maptype=roadmap&sensor=false| >"
     }
   end
   

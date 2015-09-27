@@ -14,13 +14,13 @@ class OlaCabs
   #used by slackbot
   #sandbox is always false
   def mini_available?(location)
-    # res = ride_availability(location.lat, location.lng, "mini")
-    # output = res["categories"][0]
-    # if output["eta"] == -1
-    return false
-    # else
-      # return true 
-    # end
+    res = ride_availability(location.lat, location.lng, "mini")
+    output = res["categories"][0]
+    if output["eta"] == -1
+      return false
+    else
+      return true 
+    end
   end
 
   #used by slackbot
