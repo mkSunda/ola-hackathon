@@ -143,8 +143,8 @@ class Bot
 
             color: "#E18B3D",
 
-            pretext: "Hola! Your cab will arive in *#{eta}* minutes. crn: *#{ride.crn}*",
-            text: "*#{ride.driver_name}*\t\t\t*#{ride.car_model}*\n#{ride.driver_number}\t\t\t\t\t\t#{ride.cab_number}",
+            pretext: "Hola! Your cab will arive in #{eta} minutes. crn: #{ride.crn}",
+            text: "#{ride.driver_name}\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t\t\t\t\t#{ride.cab_number}",
         }
       ]
     }
