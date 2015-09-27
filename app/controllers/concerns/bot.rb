@@ -46,7 +46,7 @@ class Bot
     time.strftime("%I:%M %p")
   end
 
-  def confirmation_message(ride)
+  def self.confirmation_message(ride)
     {
       attachments: [
         {
