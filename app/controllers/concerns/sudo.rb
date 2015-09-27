@@ -23,8 +23,12 @@ class Sudo
 	  	user = User.find(2)
 	  	if params[:time].nil?
 	  		@response = cab.book_ride(params[:lat], params[:lng])
-	  		Ride.create_new(user, Location.first, @response) if not @response.blank?
-	  		return {"message" => "Ola! We have booked your cab"}
+	  		if !@response.blank? && !@response["status"] == "FAILURE"
+	  			Ride.create_new(user, Location.first, @response)
+	  			return {"message" => "Ola! We have booked your cab"}
+	  		else
+	  			return {"message" => "Sorry! All our cab operators are busy."}
+	  		end
 	  	end
 
 	  	time = nil

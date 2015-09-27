@@ -10,8 +10,12 @@ class ApiController < ApplicationController
   def book
     cab = OlaCabs.new(params[:access_token])
     @response = cab.book_ride(params[:lat], params[:lng])
-    Ride.create_new(User.find(2), Location.first, @response) if not @response.blank?
-    render :json => {"message" => "Ola! We have booked your cab"}.as_json
+    if !@response.blank? && !@response["status"] == "FAILURE"
+      Ride.create_new(User.find(2), Location.first, @response)
+      render :json => {"message" => "Ola! We have booked your cab"}.as_json
+    else
+      render :json => {"message" => "Sorry! All our cab operators are busy."}.as_json
+    end
   end
 
   def details

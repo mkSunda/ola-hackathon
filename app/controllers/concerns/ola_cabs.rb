@@ -67,8 +67,8 @@ class OlaCabs
     JSON.parse(res)
   end
 
-  def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = nil)
-  	url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&drop_lat=#{drop_lat}&drop_lng=#{drop_lng}&category=sedan"
+  def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = "sedan")
+  	url = "http://sandbox-t.olacabs.com/v1/products?pickup_lat=#{pickup_lat}&pickup_lng=#{pickup_lng}&drop_lat=#{drop_lat}&drop_lng=#{drop_lng}&category=#{category}"
     res = RestClient.get url, headers
     JSON.parse(res)
   end

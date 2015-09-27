@@ -27,7 +27,7 @@ class Bot
         text = { text: "A sedan is #{res} mins away. Would you like me to book it ?" }
       else
         Cache.invalidate
-        { text: "Sorry! :sweat: All our cab operators our busy." }
+        { text: "Sorry! :sweat: All our cab operators are busy." }
       end
     when "book mini"
       #can't be achieved in sandbox
@@ -40,7 +40,7 @@ class Bot
         respond_back(msg)
         {}
       else
-        { text: "Sorry! :sweat: All our cab operators our busy." }
+        { text: "Sorry! :sweat: All our cab operators are busy." }
       end
     when "book in"
       time = desired_time(action[:value], action[:unit])
@@ -58,7 +58,7 @@ class Bot
       to = Location.where("lower(name) like ?","%#{action[:to].downcase}%").first
       {text: "Please enter valid locations"} if from.nil? || to.nil?
       @response = OlaCabs.new.ride_estimate(from.lat, from.lng, to.lat, to.lng)
-      {text:"fare estimate is between #{@response["ride_estimate"]["amount_min"]} to #{@response["ride_estimate"]["amount_min"]}" }
+      {text:"fare estimate is between #{@response["ride_estimate"].first["amount_min"]} to #{@response["ride_estimate"].first["amount_min"]}" }
     else
       {}
     end
