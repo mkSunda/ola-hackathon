@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 20150926210220) do
     t.string   "type",            limit: 255
     t.string   "surcharge_type",  limit: 255
     t.float    "surcharge_value", limit: 24
-    t.datetime "time"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end

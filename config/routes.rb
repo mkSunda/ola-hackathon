@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'api',             :to => 'api#index'
+  get 'api/index',       :to => 'api#index'
   get 'api/slack',       :to => 'api#slack'
   post 'api/bot',        :to => 'api#bot' 
   get 'api/book',        :to => 'api#book'

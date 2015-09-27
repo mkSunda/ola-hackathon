@@ -23,10 +23,10 @@ class OlaCabs
     JSON.parse(res)
   end
 
-  def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = nil)
-  	url = "https://devapi.olacabs.com/v1/products?pickup_lat=12.9491416&pickup_lng=77.64298&drop_lat=12.96&drop_lng=77.678&category=sedan"
-    res = RestClient.get url, headers
-  end
+  # def ride_estimate(pickup_lat, pickup_lng, drop_lat, drop_lng, category = nil)
+  # 	url = "https://devapi.olacabs.com/v1/products?pickup_lat=12.9491416&pickup_lng=77.64298&drop_lat=12.96&drop_lng=77.678&category=sedan"
+  #   res = RestClient.get url, headers
+  # end
 
   def track_ride
   	url = "http://devapi.olacabs.com/v1/bookings/track_ride"
