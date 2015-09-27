@@ -78,6 +78,10 @@ class Bot
       { text: "Bleh! :expressionless: Please take the cab and leave." }
     when "thanks"
       { text: "Your welcome!:blush: It was a pleasure helping you book an Ola." }
+    when "best office"
+      { text: "I think you should leave for home between 9-9:15 pm"}
+    when "best home"
+      { text: "I think you should leave for office between 9-9:15 am"}      
     else
       {}
     end
@@ -119,6 +123,10 @@ class Bot
       { cmd: "cancel ride" }
     elsif text.match(PATTERNS[:thanks])
       { cmd: "thanks" }
+    elsif text.match(PATTERNS[:best_office])
+      { cmd: "best office" }
+    elsif text.match(PATTERNS[:best_home])
+      { cmd: "best home" }
     else
       {}
     end

@@ -8,7 +8,9 @@ PATTERNS = {
   estimate: /from (.*\w?) to (.*\w?)/i,
   driver_location: /(driv.*loca|wher.*driv)/i,
   cancel_ride: /canc.*ride/i,
-  thanks: /^(thank|thx|ty)/i
+  thanks: /^(thank|thx|ty)/i,
+  best_office: /leave.*office/i,
+  best_home: /leave.*home/,
 }
 
 REDIS = Redis.new(host: '127.0.0.1', port: 6379, db: 3)
