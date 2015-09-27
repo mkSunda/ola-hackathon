@@ -10,4 +10,8 @@ For the hackathon, we integrated the bot with the fastest growing chat applicati
 
 [Bot Talk Rules Document (WIP)](https://slack-files.com/T0B9Y1M8U-F0BCBDC00-490356b2de)
 
+[Video](https://youtu.be/RrSaI0cUmwQ)
+
 Logo Credit: Penguin by Yi Chen from the Noun Project
+
+
