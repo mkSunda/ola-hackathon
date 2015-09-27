@@ -113,7 +113,7 @@ class Bot
   end
 
   def self.confirmation_message(ride)
-    eta = ((Ride.first.arrival_time - DateTime.now)/60).to_i
+    eta = ((ride.arrival_time - DateTime.now)/60).to_i
     {
       attachments: [
         {
