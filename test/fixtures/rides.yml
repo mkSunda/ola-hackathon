@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  location_id: 1
+  crn: 1
+  driver_name: MyString
+  driver_number: MyString
+  cab_type: MyString
+  cab_number: MyString
+  car_model: MyString
+  arrival_time: 2015-09-27 05:48:37
+  driver_lat: 9.99
+  driver_lng: 9.99
+
+two:
+  user_id: 1
+  location_id: 1
+  crn: 1
+  driver_name: MyString
+  driver_number: MyString
+  cab_type: MyString
+  cab_number: MyString
+  car_model: MyString
+  arrival_time: 2015-09-27 05:48:37
+  driver_lat: 9.99
+  driver_lng: 9.99

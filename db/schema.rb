@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150926210220) do
+ActiveRecord::Schema.define(version: 20150927001837) do
 
   create_table "cabs", force: :cascade do |t|
     t.string   "name",                    limit: 255
@@ -44,6 +44,22 @@ ActiveRecord::Schema.define(version: 20150926210220) do
     t.decimal  "lng",                    precision: 10, scale: 8
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+  end
+
+  create_table "rides", force: :cascade do |t|
+    t.integer  "user_id",       limit: 4
+    t.integer  "location_id",   limit: 4
+    t.integer  "crn",           limit: 4
+    t.string   "driver_name",   limit: 255
+    t.string   "driver_number", limit: 255
+    t.string   "cab_type",      limit: 255
+    t.string   "cab_number",    limit: 255
+    t.string   "car_model",     limit: 255
+    t.datetime "arrival_time"
+    t.decimal  "driver_lat",                precision: 10
+    t.decimal  "driver_lng",                precision: 10
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
   end
 
   create_table "scheduled_bookings", force: :cascade do |t|

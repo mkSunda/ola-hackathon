@@ -22,3 +22,7 @@
 every 15.minutes do
   rake "location_history:track"
 end
+
+every 1.minute do
+  rake "location_history:fulfill"
+end

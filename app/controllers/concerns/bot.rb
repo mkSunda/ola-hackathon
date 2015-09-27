@@ -12,11 +12,15 @@ class Bot
       time = "#{action[:value]} #{action[:unit]}"
       ScheduledBooking.new_booking(1,1,time.to_time)      
       {text: "Ola! We have scheduled your cab for #{time}"}
+    else
+      {}
     end
   end
 
   #using incoming webhooks
-  def self.respond_back(text)
+  def self.respond_back(params)
+    url = "https://hooks.slack.com/services/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"
+    RestClient.post(url, params.to_json)
   end
 
   def self.parse_command(text)
@@ -26,20 +30,24 @@ class Bot
     elsif text.match(PATTERNS[:book_at])
       matches = text.match(PATTERNS[:book_at])
       { cmd: "book at", value: matches[0].squish, unit: matches[1].squish }
+    else
+      {}
     end
   end
 
-  def self.slack_formatting(json)
-  end
 
-  def desired_time(value, units)
+  def self.desired_time(value, units)
     time = Time.now.in_time_zone("Mumbai")
     if units.starts_with?("min")
-      time += value.send(:minutes)
+      time += value.to_i.send(:minutes)
     elsif units.starts_with?("h")
-      time += value.send(:hours)
+      time += value.to_i.send(:hours)
     end
     time.strftime("%I:%M %p")
+  end
+
+  def confirmation_message(ride)
+
   end
   
 end
