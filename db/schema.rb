@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20150927001837) do
     t.string   "type",            limit: 255
     t.string   "surcharge_type",  limit: 255
     t.float    "surcharge_value", limit: 24
+    t.datetime "time"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
@@ -56,10 +57,10 @@ ActiveRecord::Schema.define(version: 20150927001837) do
     t.string   "cab_number",    limit: 255
     t.string   "car_model",     limit: 255
     t.datetime "arrival_time"
-    t.decimal  "driver_lat",                precision: 10
-    t.decimal  "driver_lng",                precision: 10
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.decimal  "driver_lat",                precision: 10, scale: 8
+    t.decimal  "driver_lng",                precision: 10, scale: 8
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
   end
 
   create_table "scheduled_bookings", force: :cascade do |t|

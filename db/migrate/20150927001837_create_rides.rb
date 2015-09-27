@@ -10,8 +10,8 @@ class CreateRides < ActiveRecord::Migration
       t.string :cab_number
       t.string :car_model
       t.datetime :arrival_time
-      t.decimal :driver_lat
-      t.decimal :driver_lng
+      t.decimal :driver_lat, :precision => 10, :scale => 8
+      t.decimal :driver_lng, :precision => 10, :scale => 8
 
       t.timestamps null: false
     end

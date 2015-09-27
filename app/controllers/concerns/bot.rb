@@ -68,7 +68,7 @@ class Bot
 
   def self.driver_location_message(ride)
     payload = {
-    "text" => "Your driver's location: <https://maps.googleapis.com/maps/api/staticmap?zoom=20&size=600x300&markers=color:red%7Clabel:C%7C#{ride.driver_lat},#{rider.driver_lng}&maptype=roadmap&sensor=false| >",
+    "text" => "Your driver's location: <https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=600x300&markers=color:red%7Clabel:C%7C#{ride.driver_lat},#{ride.driver_lng}&maptype=roadmap&sensor=false| >",
     "icon_emoji" => ":earth_americas:"
     }
   end
