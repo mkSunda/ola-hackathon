@@ -12,6 +12,9 @@ class Bot
       time = "#{action[:value]} #{action[:unit]}"
       ScheduledBooking.new_booking(1,1,time.to_time)      
       {text: "Ola! We have scheduled your cab for #{time}"}
+    when "driver location"
+      ride = Ride.last
+      msg = driver_location_message(ride)
     else
       {}
     end
@@ -30,6 +33,8 @@ class Bot
     elsif text.match(PATTERNS[:book_at])
       matches = text.match(PATTERNS[:book_at])
       { cmd: "book at", value: matches[0].squish, unit: matches[1].squish }
+    elsif text.match(PATTERNS[:driver_location])
+      { cmd: "driver location" }
     else
       {}
     end
@@ -58,6 +63,13 @@ class Bot
             text: "#{ride.driver_name}\t\t\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t#{ride.cab_number}",
         }
       ]
+    }
+  end
+
+  def self.driver_location_message(ride)
+    payload = {
+    "text" => "Your driver's location: <https://maps.googleapis.com/maps/api/staticmap?zoom=20&size=600x300&markers=color:red%7Clabel:C%7C#{ride.driver_lat},#{rider.driver_lng}&maptype=roadmap&sensor=false| >",
+    "icon_emoji" => ":earth_americas:"
     }
   end
   
