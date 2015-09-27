@@ -89,7 +89,7 @@ class Bot
       matches = text.match(PATTERNS[:book_in]).captures
       { cmd: "book in", value: matches[0].squish, unit: matches[1].squish }
     elsif text.match(PATTERNS[:book_at])
-      matches = text.match(PATTERNS[:book_at])
+      matches = text.match(PATTERNS[:book_at]).captures
       { cmd: "book at", value: matches[0].squish, unit: matches[1].squish }
     elsif text.match(PATTERNS[:driver_location])
       { cmd: "driver location" }
@@ -113,6 +113,7 @@ class Bot
   end
 
   def self.confirmation_message(ride)
+    eta = ((Ride.first.arrival_time - DateTime.now)/60).to_i
     {
       attachments: [
         {
@@ -120,8 +121,8 @@ class Bot
 
             color: "#E18B3D",
 
-            pretext: "Hola! Your cab details: #{ride.crn}",
-            text: "#{ride.driver_name}\t\t\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t#{ride.cab_number}",
+            pretext: "Hola! Your cab will arive in #{eta} minutes. crn: #{ride.crn}",
+            text: "#{ride.driver_name}\t\t\t#{ride.car_model}\n#{ride.driver_number}\t\t\t\t\t\t#{ride.cab_number}",
         }
       ]
     }

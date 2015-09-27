@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 15.minutes do
+every 30.minutes do
   rake "location_history:track"
 end
 
