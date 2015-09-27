@@ -8,3 +8,5 @@ PATTERNS = {
   estimate: /from (.*\w?) to (.*\w?)/i,
   driver_location: /driver.*loca/i,
 }
+
+REDIS = Redis.new(host: '127.0.0.1', port: 6379, db: 3)

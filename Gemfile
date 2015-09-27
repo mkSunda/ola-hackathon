@@ -37,7 +37,7 @@ gem 'capistrano-rvm'
 gem 'rest-client'
 gem 'activerecord-import'
 gem 'whenever'
-gem 'redis-session-store'
+gem 'redis'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

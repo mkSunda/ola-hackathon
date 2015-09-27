@@ -10,11 +10,11 @@ class Bot
       location = Location.find(2)
       res = OlaCabs.new.mini_available?(location)
       if res
-        session[:action] = {yes: "book mini", no: "cancel" }
+        Cache.set("book mini", "cancel")
         #defunct in sandbox
         text = { text: "A mini is 2 minutes away. Should I book it for you ?" }
       else
-        session[:action] = { yes: "book sedan", no: "cancel" }
+        Cache.set("book sedan", "cancel")
         res = OlaCabs.new.sedan_available?(location)
         #unreliable sedan availability; works for only 2,5,19,27,40
         text = { text: "There are no minis available right now, would you like me to book a Sedan 17 mins away at INR 13/km ?" }
@@ -23,10 +23,10 @@ class Bot
       location = Location.find(2)
       res = OlaCabs.new.sedan_available?(location)
       if res
-        session[:action] = { yes: "book sedan", no: "cancel" }
+        Cache.set("book sedan", "cancel")
         text = { text: "A sedan is #{res} mins away. Would you like me to book it ?" }
       else
-        session.clear
+        Cache.invalidate
         { text: "Sorry! :sweat: All our cab operators our busy." }
       end
     when "book mini"
@@ -73,13 +73,13 @@ class Bot
   def self.parse_command(text)
     #rely on session data for yes actions
     if text.match(PATTERNS[:yes])
-      action = session[:action][:yes]
-      session.clear
+      action = Cache.get[0]
+      Cache.invalidate
       { cmd: action }
     #rely on session data for no actions
     elsif text.match(PATTERNS[:no])
-      action = session[:action][:no]
-      session.clear
+      action = Cache.get[1]
+      Cache.invalidate
       { cmd: action }
     elsif text.match(PATTERNS[:mini])
       { cmd: "find mini" }
