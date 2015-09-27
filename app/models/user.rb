@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 		if not ride.nil?
 			output = {:category => "Sedan", :pickup_time => ride.arrival_time.strftime("%I:%M %p"),
 			 :driver_name => ride.driver_name, :driver_number => ride.driver_number, :cab_number => ride.cab_number,
-			 :confirmed => true}
+			 :car_model => ride.car_model, :confirmed => true}
 		elsif not scheduled_booking.nil?
 			output = {:category => "Sedan", :pickup_time => ride.pickup_time.strftime("%I:%M %p"), :confirmed => false}
 		end
