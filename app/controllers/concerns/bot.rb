@@ -56,7 +56,7 @@ class Bot
     when "estimate"
       from = Location.where("name is like '%?%'",action[:from]).first
       to = Location.where("name is like '%?%'",action[:to]).first
-      {text : "Please enter valid locations"} if from.nil? || to.nil?
+      {text: "Please enter valid locations"} if from.nil? || to.nil?
       @response = OlaCabs.new.ride_estimate(from.lat, from.lng, to.lat, to.lng)
       {text:"fare estimate is between #{@response["ride_estimate"]["amount_min"]} to #{@response["ride_estimate"]["amount_min"]}" }
     else
