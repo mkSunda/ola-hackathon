@@ -60,14 +60,7 @@ class Sudo
 			end
 			output[:ride] = {}
 			user = User.find(2)
-			ride = user.rides.order("arrival_time").last
-			scheduled_booking = user.scheduled_bookings.order("pickup_time").last
-			if not ride.nil?
-				output[:ride] = {:category => "Sedan", :pickup_time => ride.arrival_time.strftime("%I:%M %p")}
-			elsif not scheduled_booking.nil?
-				output[:ride] = {:category => "Sedan", :pickup_time => ride.pickup_time.strftime("%I:%M %p")}
-			end
-					
+			output[:ride] = user.ride_details
 			return output
 		when "book", "call", "get"
 			return json
